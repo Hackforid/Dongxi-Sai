@@ -96,7 +96,12 @@ public class DongxiListAdapter extends BaseAdapter {
             holder.comment.setText(dongxi.text);
         }
 
-        Picasso.with(mContext).load(dongxi.pictures.get(0).src).into(holder.image);
+        if (mIsGetSize) {
+            Picasso.with(mContext).load(dongxi.pictures.get(0).src).resize(mImageWidth, mImageHeight).centerCrop().into(holder.image);
+        } else {
+            Picasso.with(mContext).load(dongxi.pictures.get(0).src).into(holder.image);
+        }
+
         Picasso.with(mContext).load(dongxi.author.largeAvatar).transform(mCircleTransform).into(holder.avatar);
         return convertView;
     }

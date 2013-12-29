@@ -60,6 +60,9 @@ public class HomeFragment extends Fragment implements OnRefreshListener{
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mDongxiTask != null) {
+            mDongxiTask.cancel();
+        }
         mEventBus.unregister(this);
     }
 
