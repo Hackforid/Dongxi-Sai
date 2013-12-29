@@ -51,7 +51,7 @@ public class HomeActivity extends Activity {
         // init sliding menu
         mSlidingMenu = new SlidingMenu(this);
         mSlidingMenu.setMode(SlidingMenu.LEFT);
-        mSlidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        mSlidingMenu.setBehindOffset(APP.deviceInfo.screenWidth * 3 / 5);
         mSlidingMenu.setShadowWidthRes(R.dimen.slidingmenu_shadow_width);
         mSlidingMenu.setShadowDrawable(R.drawable.shadow);
         mSlidingMenu.setFadeDegree(0.35f);

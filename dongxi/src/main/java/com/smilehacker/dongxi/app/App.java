@@ -15,6 +15,8 @@ public class App extends Application{
     private static Bitmap.CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = Bitmap.CompressFormat.PNG;
     private static int DISK_IMAGECACHE_QUALITY = 100;  //PNG is lossless so quality is ignored but must be provided
 
+    public DeviceInfo deviceInfo;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -24,6 +26,8 @@ public class App extends Application{
                 DISK_IMAGECACHE_COMPRESS_FORMAT,
                 DISK_IMAGECACHE_QUALITY,
                 MEM_IMAGECACHE_SIZE);
+
+        deviceInfo = new DeviceInfo(this);
     }
 
 }

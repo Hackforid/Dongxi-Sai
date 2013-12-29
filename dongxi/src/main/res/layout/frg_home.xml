@@ -20,8 +20,8 @@
             android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@android:color/transparent"
-            >
-        </ListView>
+            />
+
 
     </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 

@@ -3,6 +3,9 @@
     <color name="holo_light_gray">#FFDDDDDD</color>
     <color name="light_gray_back">#33C0C0C0</color>
     <color name="holo_gray">#FFC0C0C0</color>
+    <color name="mi_while">#fffff0</color>
+    <color name="gray_font">#c6c6c6</color>
+    <color name="menu_bg">#232323</color>
 
     <color name="dongxi_title_brown">#7f4b2f</color>
     <color name="dongxi_price_bg">#55cfcfcf</color>

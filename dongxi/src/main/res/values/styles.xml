@@ -6,7 +6,6 @@
     </style>
 
     <style name="AppTheme.Overlay">
-        <item name="android:actionBarStyle">@style/DongxiActionBar.Overay</item>
         <item name="android:windowActionBarOverlay">true</item>
     </style>
 
@@ -15,9 +14,6 @@
         <item name="android:titleTextStyle">@style/DongxiTitleTextStyle</item>
     </style>
 
-    <style name="DongxiActionBar.Overay">
-        <item name="android:background">@android:color/transparent</item>
-    </style>
 
     <style name="DongxiTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
