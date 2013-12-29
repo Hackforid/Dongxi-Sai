@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="light_gray_back">#33C0C0C0</color>
     <color name="holo_light_gray">#FFDDDDDD</color>
+    <color name="light_gray_back">#33C0C0C0</color>
+    <color name="holo_gray">#FFC0C0C0</color>
 
     <color name="dongxi_title_brown">#7f4b2f</color>
-    <color name="dongxi_price_bg">#b9b9b9a5</color>
+    <color name="dongxi_price_bg">#55cfcfcf</color>
+    <color name="dongxi_red">#c4533a</color>
 </resources>

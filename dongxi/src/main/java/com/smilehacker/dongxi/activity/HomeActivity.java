@@ -56,7 +56,7 @@ public class HomeActivity extends Activity {
         mSlidingMenu.setShadowDrawable(R.drawable.shadow);
         mSlidingMenu.setFadeDegree(0.35f);
         mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
         mSlidingMenu.setMenu(R.layout.menu_frame);
         if (savedInstanceState == null) {
             FragmentTransaction t = this.getFragmentManager().beginTransaction();

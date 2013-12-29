@@ -4,20 +4,24 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/bg_card"
-        android:padding="1dp"
+        android:paddingBottom="20dp"
+        android:paddingTop="1dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
         >
 
         <ImageView
             android:id="@+id/iv_dongxi"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:scaleType="fitCenter"
-            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher"
             />
 
         <TextView
@@ -36,10 +40,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/iv_dongxi"
-            android:layout_margin="20dp"
+            android:layout_margin="25dp"
             android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@color/dongxi_title_brown"
+            />
+
+        <ImageView
+            android:id="@+id/iv_author_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/tv_dongxi_title"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            />
+
+        <TextView
+            android:id="@+id/tv_author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_dongxi_title"
+            android:layout_toRightOf="@id/iv_author_avatar"
+            android:layout_marginTop="12dp"
+            android:textSize="14sp"
+            android:textColor="@color/dongxi_red"
+            />
+
+        <TextView
+            android:id="@+id/tv_dongxi_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_author_avatar"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
             />
 
     </RelativeLayout>

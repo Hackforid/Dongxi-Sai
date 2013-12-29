@@ -170,5 +170,6 @@ public class HomeFragment extends Fragment implements OnRefreshListener{
         public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             this.visibleLastIndex = firstVisibleItem + visibleItemCount - 1;
         }
+
     }
 }
