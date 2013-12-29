@@ -216,7 +216,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 
         @Override
         public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-            int itemLastIndex = mAdapter.getCount() + 1;
+            int itemLastIndex = mAdapter.getCount() + 1; // 包括header和footer
             if (scrollState == SCROLL_STATE_IDLE && this.visibleLastIndex == itemLastIndex && mLoadingStatus != LoadingStatus.loadingMore) {
                 load(mCategoryId, mDongxiList.get(mDongxiList.size() - 1).fid, LoadingStatus.loadingMore);
             }
