@@ -50,7 +50,7 @@ public class DongxiTask extends SimpleVolleyTask<List<Dongxi>>{
     @Override
     public Throwable onErrorResponse(VolleyError volleyError) {
         Log.i(TAG, "error:" + volleyError.toString());
-        return null;
+        return volleyError;
     }
 
     @Override

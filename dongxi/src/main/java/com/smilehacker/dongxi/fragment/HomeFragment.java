@@ -2,7 +2,6 @@ package com.smilehacker.dongxi.fragment;
 
 import android.app.Fragment;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -20,7 +19,6 @@ import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.model.event.CategoryEvent;
 import com.smilehacker.dongxi.network.SimpleVolleyTask;
 import com.smilehacker.dongxi.network.task.DongxiTask;
-import com.smilehacker.dongxi.view.NotifyingListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +51,10 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 
     private int mCategoryId;
     private String mUntilId;
-    private Boolean mIsLoadingMore = false;
+    private enum LoadingStatus {
+        refresh, loadingMore, stop
+    }
+    private LoadingStatus mLoadingStatus = LoadingStatus.stop;
     private int mActionBarHeight;
 
     @Override
@@ -95,7 +96,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
             mActionBarContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    load(mCategoryId, null);
+                    load(mCategoryId, null, LoadingStatus.refresh);
                 }
             });
         }
@@ -112,13 +113,13 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        load(Constants.DONGXI_ALL, null);
+        load(Constants.DONGXI_ALL, null, LoadingStatus.refresh);
     }
 
     public void onEvent(CategoryEvent event) {
         getActivity().setTitle(event.title);
         mCategoryId = event.id;
-        load(event.id, null);
+        load(event.id, null, LoadingStatus.refresh);
     }
 
     private void addListViewHeader() {
@@ -140,41 +141,49 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
         return mActionBarHeight;
     }
 
-    private void load(int tag, String untilId) {
+    private void load(int tag, String untilId, LoadingStatus status) {
+        mLoadingStatus = status;
         if (mDongxiTask == null) {
             mDongxiTask = new DongxiTask(getActivity(), new SimpleVolleyTask.VolleyTaskCallBack<List<Dongxi>>() {
                 @Override
+                public void onStart() {
+                    if (mLoadingStatus == LoadingStatus.refresh) {
+                        startRefresh();
+                        mLvDongxi.smoothScrollToPosition(0);
+                        mPbLoading.setVisibility(View.GONE);
+                    } else if (mLoadingStatus == LoadingStatus.loadingMore) {
+                        stopRefresh();
+                        mPbLoading.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
                 public void onSuccess(List<Dongxi> result) {
                     stopRefresh();
-                    if (mIsLoadingMore) {
+                    mPbLoading.setVisibility(View.GONE);
+
+                    if (mLoadingStatus == LoadingStatus.loadingMore) {
                         mDongxiList.addAll(result);
                         mAdapter.notifyDataSetChanged();
-                        mPbLoading.setVisibility(View.GONE);
-                        mIsLoadingMore = false;
                     } else {
                         mDongxiList.clear();
                         mDongxiList.addAll(result);
                         mAdapter.notifyDataSetChanged();
                     }
+
+                    mLoadingStatus = LoadingStatus.stop;
                 }
 
                 @Override
                 public void onFail(Throwable e) {
-                    if (mIsLoadingMore) {
-                        mPbLoading.setVisibility(View.GONE);
-                        mIsLoadingMore = false;
-                    } else {
-                        stopRefresh();
+                    mLoadingStatus = LoadingStatus.stop;
+                    mPbLoading.setVisibility(View.GONE);
+                    stopRefresh();
+                    if (e != null) {
+                        e.printStackTrace();
                     }
                 }
 
-                @Override
-                public void onStart() {
-                    mLvDongxi.smoothScrollToPosition(0);
-                    if (!mIsLoadingMore) {
-                        startRefresh();
-                    }
-                }
             });
         } else {
             mDongxiTask.cancel();
@@ -185,15 +194,21 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 
     @Override
     public void onRefreshStarted(View view) {
-        load(mCategoryId, null);
+        if (mLoadingStatus != LoadingStatus.refresh) {
+            load(mCategoryId, null, LoadingStatus.refresh);
+        }
     }
 
     private void stopRefresh() {
-        mPtrLayout.setRefreshing(false);
+        if (mPtrLayout.isRefreshing()) {
+            mPtrLayout.setRefreshing(false);
+        }
     }
 
     private void startRefresh() {
-        mPtrLayout.setRefreshing(true);
+        if (!mPtrLayout.isRefreshing()) {
+            mPtrLayout.setRefreshing(true);
+        }
     }
 
     private class DongxiListOnScrollListener implements AbsListView.OnScrollListener {
@@ -201,11 +216,9 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 
         @Override
         public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-            int itemLastIndex = mAdapter.getCount();
-            if (scrollState == SCROLL_STATE_IDLE && this.visibleLastIndex == itemLastIndex && !mIsLoadingMore) {
-                mIsLoadingMore = true;
-                mPbLoading.setVisibility(View.VISIBLE);
-                load(mCategoryId, mDongxiList.get(mDongxiList.size() - 1).fid);
+            int itemLastIndex = mAdapter.getCount() + 1;
+            if (scrollState == SCROLL_STATE_IDLE && this.visibleLastIndex == itemLastIndex && mLoadingStatus != LoadingStatus.loadingMore) {
+                load(mCategoryId, mDongxiList.get(mDongxiList.size() - 1).fid, LoadingStatus.loadingMore);
             }
 
         }
@@ -214,10 +227,12 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
         public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             this.visibleLastIndex = firstVisibleItem + visibleItemCount - 1;
 
+            /**
+             * 通过header滚动的距离来设置actionbar背景的alpha
+             */
             if (firstVisibleItem == 0) {
                 View firstView = absListView.getChildAt(0);
                 if (firstView != null) {
-                    Log.i(TAG, "y=" + firstView.getY());
                     double ratio =  firstView.getY() / mActionBarHeight + 1;
                     ratio = ratio < 0.3 ? 0.3 : ratio;
                     int alpha = (int) (ratio * 255);
