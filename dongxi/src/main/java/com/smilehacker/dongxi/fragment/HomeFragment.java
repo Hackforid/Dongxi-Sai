@@ -87,9 +87,9 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
         mPbLoading = (ProgressBar) mVLoadMore.findViewById(R.id.pb_loading);
         mActionBarContainer = getActivity().findViewById(getResources().getIdentifier("action_bar_container", "id", "android"));
 
-        mLvDongxi.setAdapter(mAdapter);
-        mLvDongxi.addFooterView(mVLoadMore);
         addListViewHeader();
+        mLvDongxi.addFooterView(mVLoadMore);
+        mLvDongxi.setAdapter(mAdapter);
         mLvDongxi.setOnScrollListener(new DongxiListOnScrollListener());
 
         if (mActionBarContainer != null) {

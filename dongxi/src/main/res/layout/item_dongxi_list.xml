@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="15dp"
         android:background="@drawable/bg_card"
         android:paddingBottom="20dp"
         android:paddingTop="1dp"
@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/iv_dongxi"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="220dp"
             android:scaleType="centerCrop"
             />
 
@@ -39,16 +39,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/iv_dongxi"
-            android:layout_margin="25dp"
-            android:textSize="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/dongxi_title_brown"
             />
 
         <ImageView
             android:id="@+id/iv_author_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_below="@id/tv_dongxi_title"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"
@@ -61,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_dongxi_title"
             android:layout_toRightOf="@id/iv_author_avatar"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:textSize="14sp"
             android:textColor="@color/dongxi_red"
             />
