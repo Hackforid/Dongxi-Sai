@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.adapter.DongxiListAdapter;
@@ -40,6 +42,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
     private View mVLoadMore;
     private ProgressBar mPbLoading;
     private View mActionBarContainer;
+    private ImageView mIvRefresh;
 
     private Drawable mActionBarBackgroundDrawble;
 
@@ -86,6 +89,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
         mVLoadMore = inflater.inflate(R.layout.footer_dongxi_list, null);
         mPbLoading = (ProgressBar) mVLoadMore.findViewById(R.id.pb_loading);
         mActionBarContainer = getActivity().findViewById(getResources().getIdentifier("action_bar_container", "id", "android"));
+        mIvRefresh = (ImageView) view.findViewById(R.id.iv_refresh);
 
         addListViewHeader();
         mLvDongxi.addFooterView(mVLoadMore);
@@ -100,6 +104,13 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
                 }
             });
         }
+
+        mIvRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                load(mCategoryId, null, LoadingStatus.refresh);
+            }
+        });
 
         return view;
     }
@@ -182,6 +193,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
                     if (e != null) {
                         e.printStackTrace();
                     }
+                    Toast.makeText(getActivity(), R.string.error_msg_load_fail, Toast.LENGTH_SHORT).show();
                 }
 
             });

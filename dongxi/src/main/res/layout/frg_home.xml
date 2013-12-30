@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -24,5 +24,16 @@
 
 
     </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
+    <ImageView
+        android:id="@+id/iv_refresh"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/refresh"
+        android:scaleType="fitCenter"
+        />
+</RelativeLayout>
 
-</LinearLayout>

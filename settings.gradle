@@ -1,1 +1,1 @@
-include ':dongxi'
+include ':dongxi', ':Libs:SlidingMenu'

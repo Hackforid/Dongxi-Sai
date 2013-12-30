@@ -30,7 +30,10 @@
             android:layout_alignBottom="@id/iv_dongxi"
             android:layout_alignParentRight="true"
             android:gravity="right"
-            android:padding="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:background="@color/dongxi_price_bg"
             />
 
