@@ -2,10 +2,12 @@ package com.smilehacker.dongxi.fragment;
 
 import android.app.Fragment;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -14,6 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.devspark.appmsg.AppMsg;
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.adapter.DongxiListAdapter;
 import com.smilehacker.dongxi.app.Constants;
@@ -45,6 +48,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
     private ImageView mIvRefresh;
 
     private Drawable mActionBarBackgroundDrawble;
+    private AppMsg.Style mAppMsgStyle;
 
     private DongxiTask mDongxiTask;
     private DongxiListAdapter mAdapter;
@@ -67,6 +71,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
         mAdapter = new DongxiListAdapter(getActivity(), mDongxiList);
         mEventBus = EventBus.getDefault();
         mEventBus.register(this);
+        mAppMsgStyle = new AppMsg.Style(AppMsg.LENGTH_SHORT,R.color.menu_bg);
 
         mActionBarBackgroundDrawble = getResources().getDrawable(R.drawable.red_actionbar_bg);
         getActivity().getActionBar().setBackgroundDrawable(mActionBarBackgroundDrawble);
@@ -91,10 +96,8 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
         mActionBarContainer = getActivity().findViewById(getResources().getIdentifier("action_bar_container", "id", "android"));
         mIvRefresh = (ImageView) view.findViewById(R.id.iv_refresh);
 
-        addListViewHeader();
-        mLvDongxi.addFooterView(mVLoadMore);
-        mLvDongxi.setAdapter(mAdapter);
-        mLvDongxi.setOnScrollListener(new DongxiListOnScrollListener());
+        initListView();
+
 
         if (mActionBarContainer != null) {
             mActionBarContainer.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +117,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 
         return view;
     }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -150,6 +154,50 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
             mActionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
         }
         return mActionBarHeight;
+    }
+
+    private void initListView() {
+        addListViewHeader();
+        mLvDongxi.addFooterView(mVLoadMore);
+        mLvDongxi.setAdapter(mAdapter);
+        mLvDongxi.setOnScrollListener(new DongxiListOnScrollListener());
+        mLvDongxi.setOnTouchListener(new View.OnTouchListener() {
+            private float lastY;
+            private Boolean isSetAlpha;
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        lastY = motionEvent.getRawY();
+                        isSetAlpha = false;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (isSetAlpha) {
+                            break;
+                        }
+                        int distance = (int) (motionEvent.getRawY() - lastY);
+                        if (distance > 50) {
+                            setRefreshBtnAlpha(255);
+                        } else if (distance < -50) {
+                            setRefreshBtnAlpha(50);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
+            }
+
+            private void setRefreshBtnAlpha(int alpha) {
+                if (Build.VERSION.SDK_INT < 16) {
+                    mIvRefresh.setAlpha(alpha);
+                } else {
+                    mIvRefresh.setImageAlpha(alpha);
+                }
+            }
+        });
     }
 
     private void load(int tag, String untilId, LoadingStatus status) {
@@ -226,8 +274,14 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
     private class DongxiListOnScrollListener implements AbsListView.OnScrollListener {
         private int visibleLastIndex = 0;
 
+        private int lastY;
+        private int lastDirection;
+
         @Override
         public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+            /**
+             * loading more
+             */
             int itemLastIndex = mAdapter.getCount() + 1; // 包括header和footer
             if (scrollState == SCROLL_STATE_IDLE && this.visibleLastIndex == itemLastIndex && mLoadingStatus != LoadingStatus.loadingMore) {
                 load(mCategoryId, mDongxiList.get(mDongxiList.size() - 1).fid, LoadingStatus.loadingMore);
@@ -251,7 +305,6 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
                     mActionBarBackgroundDrawble.setAlpha(alpha);
                 }
             }
-              
         }
 
     }

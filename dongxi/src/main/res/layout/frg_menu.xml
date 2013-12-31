@@ -5,11 +5,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/menu_bg"
+              android:paddingTop="60dp"
     >
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
         android:divider="@color/gray_font">
 
     </ListView>
