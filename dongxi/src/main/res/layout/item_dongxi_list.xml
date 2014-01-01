@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:background="@drawable/bg_card"
+        android:background="@drawable/btn_bg_card"
         android:paddingBottom="20dp"
         android:paddingTop="1dp"
         android:paddingLeft="1dp"
@@ -70,7 +70,7 @@
             android:layout_toRightOf="@id/iv_author_avatar"
             android:layout_marginTop="10dp"
             android:textSize="14sp"
-            android:textColor="@color/dongxi_red"
+            android:textColor="@color/dongxi_title_brown"
             />
 
         <TextView

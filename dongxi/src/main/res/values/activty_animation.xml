@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="sliding_animation" mce_bogus="1" parent="android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/second_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/first_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/first_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/second_out</item>
+    </style>
+</resources>

@@ -35,13 +35,16 @@ public class MerchantActivity extends Activity {
         setContentView(R.layout.activity_merchant);
         mWebView = (WebView) findViewById(R.id.webview);
 
-        mDongxi = getIntent().getParcelableExtra(Constants.KEY_DONGXI);
-        mMerchantUrl = mDongxi.purchaseUrl;
-
         init();
     }
 
     private void init() {
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+        mDongxi = getIntent().getParcelableExtra(Constants.KEY_DONGXI);
+        mMerchantUrl = mDongxi.purchaseUrl;
+
         initWebView();
     }
 
@@ -56,7 +59,7 @@ public class MerchantActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                activity.setProgress(newProgress * 1000);
+                activity.setProgress(newProgress * 100);
             }
         });
 
@@ -85,6 +88,13 @@ public class MerchantActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 

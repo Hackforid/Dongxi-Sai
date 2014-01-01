@@ -13,7 +13,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
         android:textSize="17dp"
-        android:textColor="@android:color/holo_orange_dark"
+        android:textColor="@android:color/holo_green_light"
         android:textStyle="bold"
         />
 

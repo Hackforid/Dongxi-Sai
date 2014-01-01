@@ -66,7 +66,7 @@ public class DongxiListAdapter extends BaseAdapter {
          * width = match_parent - 32dp
          */
         App app = (App) mContext.getApplicationContext();
-        mDongxiImageWidth = (int) (app.deviceInfo.screenWidth - 32 * app.deviceInfo.density);
+        mDongxiImageWidth = (int) (app.deviceInfo.screenWidth - 30 * app.deviceInfo.density);
         mDongxiImageHeight = mDongxiImageWidth * 2 / 3;
         mImageLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mDongxiImageHeight);
 

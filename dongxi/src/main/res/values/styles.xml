@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/DongxiActionBar</item>
+        <item name="android:windowAnimationStyle">@style/sliding_animation</item>
     </style>
 
     <style name="AppTheme.Overlay">

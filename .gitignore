@@ -12,4 +12,6 @@ gen-external-apklibs
 local.properties
 .DS_Store
 .gradle
+cker/dongxi/app
 build/
+dongxi/src/main/java/com/smilehacker/dongxi/app/Constants.java

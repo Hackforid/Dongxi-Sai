@@ -7,4 +7,5 @@
     <dimen name="slidingmenu_offset">250dp</dimen>
 
     <dimen name="detail_scroll_header">300dp</dimen>
-    </resources>
+
+</resources>

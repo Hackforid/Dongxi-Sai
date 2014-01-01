@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -54,6 +55,10 @@ public class DetailFragment extends Fragment {
         mDongxi = args.getParcelable(Constants.KEY_DONGXI);
         mAdapter = new ImagePagerAdapter(mDongxi.pictures);
         mCircleTransform = new CircleTransform();
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActivity().getActionBar().setHomeButtonEnabled(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -111,6 +116,20 @@ public class DetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().finish();
+                return true;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private class ImagePagerAdapter extends PagerAdapter {
         private List<Picture> pictures;
 
@@ -155,5 +174,6 @@ public class DetailFragment extends Fragment {
         public boolean isViewFromObject(View view, Object o) {
             return view == o;
         }
+
     }
 }
