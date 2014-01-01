@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.smilehacker.dongxi.model.Dongxi;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

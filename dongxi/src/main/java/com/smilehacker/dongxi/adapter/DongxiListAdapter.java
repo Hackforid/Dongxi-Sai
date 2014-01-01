@@ -2,21 +2,17 @@ package com.smilehacker.dongxi.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.text.BoringLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.Utils.CircleTransform;
 import com.smilehacker.dongxi.activity.DetailActivity;
@@ -27,7 +23,6 @@ import com.smilehacker.dongxi.network.image.ImageCacheManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by kleist on 13-12-25.

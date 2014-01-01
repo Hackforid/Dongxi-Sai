@@ -2,7 +2,6 @@ package com.smilehacker.dongxi.app;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 /**
  * Created by kleist on 13-12-29.

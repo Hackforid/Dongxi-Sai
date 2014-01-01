@@ -13,10 +13,6 @@ import android.widget.TextView;
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.model.event.CategoryEvent;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import de.greenrobot.event.EventBus;
 
 /**

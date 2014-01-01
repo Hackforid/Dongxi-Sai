@@ -1,20 +1,13 @@
 package com.smilehacker.dongxi.activity;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.LinearLayout;
 
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.app.Constants;
