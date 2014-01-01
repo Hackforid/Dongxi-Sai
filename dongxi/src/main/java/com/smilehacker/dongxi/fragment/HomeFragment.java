@@ -1,5 +1,6 @@
 package com.smilehacker.dongxi.fragment;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -30,6 +31,7 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
@@ -122,7 +124,9 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ActionBarPullToRefresh.from(getActivity()).allChildrenArePullable().listener(this).setup(mPtrLayout);
+        ActionBarPullToRefresh.from(getActivity())
+                .options(Options.create().scrollDistance(0.3f).build())
+                .allChildrenArePullable().listener(this).setup(mPtrLayout);
     }
 
     @Override
@@ -163,7 +167,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
         mLvDongxi.setOnScrollListener(new DongxiListOnScrollListener());
         mLvDongxi.setOnTouchListener(new View.OnTouchListener() {
             private float lastY;
-            private Boolean isSetAlpha;
+            private Boolean isSetAlpha = false;
 
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -190,6 +194,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
                 return false;
             }
 
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             private void setRefreshBtnAlpha(int alpha) {
                 if (Build.VERSION.SDK_INT < 16) {
                     mIvRefresh.setAlpha(alpha);
@@ -300,7 +305,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
                 View firstView = absListView.getChildAt(0);
                 if (firstView != null) {
                     double ratio =  firstView.getY() / mActionBarHeight + 1;
-                    ratio = ratio < 0.3 ? 0.3 : ratio;
+                    ratio = ratio < 0.2 ? 0.2 : ratio;
                     int alpha = (int) (ratio * 255);
                     mActionBarBackgroundDrawble.setAlpha(alpha);
                 }

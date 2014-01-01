@@ -23,4 +23,10 @@ public class Constants {
     public final static int DONGXI_EXP = 47;
     public final static int DONGXI_GIFT = 48;
 
+    public final static String DOUBAN_LINK = "http://www.douban.com/link2?url=";
+
+    public final static String KEY_DONGXI = "key_dongxi";
+    public final static String KEY_MERCHANT_URL = "key_merchant_url";
+    public final static String KEY_CURRENT_PHOTO = "key_current_photo";
+
 }

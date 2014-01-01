@@ -16,14 +16,28 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.smilehacker.dongxi.activity.HomeActivity"
+            android:hardwareAccelerated="true"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.Overlay"
-            android:hardwareAccelerated="true">
+            android:theme="@style/AppTheme.Overlay" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.smilehacker.dongxi.activity.DetailActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_home" >
+        </activity>
+        <activity
+            android:name="com.smilehacker.dongxi.activity.PhotoActivity"
+            android:label="@string/title_activity_photo"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name="com.smilehacker.dongxi.activity.MerchantActivity"
+            android:label="@string/title_activity_merchant" >
         </activity>
     </application>
 

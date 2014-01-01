@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/gray_bg"
+    >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_images"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detail_scroll_header" />
+
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/image_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/viewpager_images"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="5dp"
+        android:layout_marginBottom="10dp"
+        />
+
+    <com.smilehacker.dongxi.view.DetailScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/detail_scroll_header"
+            >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/detail_bg"
+            >
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textColor="@android:color/black"
+                android:textSize="15sp"
+                android:text="sample"
+                />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_buy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_price"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/btn_buy"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                style="@style/Button.Holo.Green"
+                />
+
+            <ImageView
+                android:id="@+id/iv_author_avatar"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_below="@id/btn_buy"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="centerCrop"
+                />
+
+            <TextView
+                android:id="@+id/tv_author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btn_buy"
+                android:layout_toRightOf="@id/iv_author_avatar"
+                android:layout_marginTop="25dp"
+                android:textSize="14sp"
+                android:textColor="@color/dongxi_red"
+                />
+
+            <TextView
+                android:id="@+id/tv_dongxi_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_author_avatar"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                />
+
+        </RelativeLayout>
+        </LinearLayout>
+    </com.smilehacker.dongxi.view.DetailScrollView>
+
+
+</RelativeLayout>

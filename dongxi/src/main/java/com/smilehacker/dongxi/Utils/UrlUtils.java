@@ -1,5 +1,9 @@
 package com.smilehacker.dongxi.Utils;
 
+import com.smilehacker.dongxi.app.Constants;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -51,6 +55,22 @@ public class UrlUtils {
         }
 
         return url.toString();
+    }
+
+    public static String getUrlFromDoubanLink(String doubanUrl) {
+        if (!doubanUrl.startsWith(Constants.DOUBAN_LINK)) {
+            return doubanUrl;
+        }
+
+        String url = doubanUrl.substring(Constants.DOUBAN_LINK.length());
+
+        try {
+            url = URLDecoder.decode(url, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 
 }

@@ -21,4 +21,33 @@
     </style>
 
 
+
+
+
+
+
+
+
+
+
+
+    <style name="Button.Default" parent="android:Widget.Button">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">44dip</item>
+        <item name="android:minWidth">56dip</item>
+    </style>
+
+
+    <style name="Button.Holo.Green" parent="Button.Default">
+        <item name="android:background">@drawable/btn_bg_holo_green</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:minWidth">60dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

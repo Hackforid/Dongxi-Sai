@@ -1,6 +1,7 @@
 package com.smilehacker.dongxi.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.text.BoringLayout;
 import android.text.TextUtils;
@@ -11,12 +12,16 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.Utils.CircleTransform;
+import com.smilehacker.dongxi.activity.DetailActivity;
+import com.smilehacker.dongxi.app.App;
+import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.network.image.ImageCacheManager;
 import com.squareup.picasso.Picasso;
@@ -40,6 +45,10 @@ public class DongxiListAdapter extends BaseAdapter {
     private ImageViewSize mImageSize;
     private ImageViewSize mAvatarSize;
 
+    private int mDongxiImageWidth;
+    private int mDongxiImageHeight;
+    private RelativeLayout.LayoutParams mImageLayoutParams;
+
     public DongxiListAdapter(Context context, List<Dongxi> dongxiList) {
         mContext = context;
         mDongxiList = dongxiList;
@@ -48,6 +57,20 @@ public class DongxiListAdapter extends BaseAdapter {
         mCircleTransform = new CircleTransform();
         mImageSize = new ImageViewSize();
         mAvatarSize = new ImageViewSize();
+        computerImageViewSize();
+    }
+
+    private void computerImageViewSize() {
+        /**
+         * padding 1dp margin 15dp
+         * width = match_parent - 32dp
+         */
+        App app = (App) mContext.getApplicationContext();
+        mDongxiImageWidth = (int) (app.deviceInfo.screenWidth - 32 * app.deviceInfo.density);
+        mDongxiImageHeight = mDongxiImageWidth * 2 / 3;
+        mImageLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mDongxiImageHeight);
+
+        Log.i(TAG, "h="+mDongxiImageHeight + " w=" + mDongxiImageWidth + " density="+app.deviceInfo.density);
     }
 
     @Override
@@ -77,13 +100,15 @@ public class DongxiListAdapter extends BaseAdapter {
             holder.avatar = (ImageView) convertView.findViewById(R.id.iv_author_avatar);
             holder.author = (TextView) convertView.findViewById(R.id.tv_author_name);
             holder.comment = (TextView) convertView.findViewById(R.id.tv_dongxi_comment);
+            holder.dongxi = convertView.findViewById(R.id.v_dongxi);
+            holder.image.setLayoutParams(mImageLayoutParams);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
 
-        Dongxi dongxi = mDongxiList.get(position);
+        final Dongxi dongxi = mDongxiList.get(position);
         holder.price.setText(dongxi.price);
         holder.title.setText(dongxi.title);
         holder.author.setText(dongxi.author.name);
@@ -94,34 +119,21 @@ public class DongxiListAdapter extends BaseAdapter {
             holder.comment.setText(dongxi.text);
         }
 
-        if (mImageSize.isGetSize) {
-            Picasso.with(mContext).load(dongxi.pictures.get(0).src).resize(mImageSize.width, mImageSize.height).centerCrop().into(holder.image);
-        } else {
-            getImageSize(holder.image, mImageSize);
-            Picasso.with(mContext).load(dongxi.pictures.get(0).src).into(holder.image);
-        }
+        Picasso.with(mContext).load(dongxi.pictures.get(0).src).resize(mDongxiImageWidth, mDongxiImageHeight).centerCrop().into(holder.image);
 
         Picasso.with(mContext).load(dongxi.author.largeAvatar).transform(mCircleTransform).into(holder.avatar);
-        return convertView;
-    }
 
-    private void getImageSize(final ImageView view, final ImageViewSize size) {
-        if (!size.isGetSize) {
-            ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
-            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    if (Build.VERSION.SDK_INT >= 16) {
-                        view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    } else {
-                        view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }
-                    size.height = view.getHeight();
-                    size.width = view.getWidth();
-                    size.isGetSize = true;
-                }
-            });
-        }
+        holder.dongxi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, DetailActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Constants.KEY_DONGXI, dongxi);
+                mContext.startActivity(intent);
+            }
+        });
+
+        return convertView;
     }
 
     private static class ViewHolder {
@@ -131,6 +143,7 @@ public class DongxiListAdapter extends BaseAdapter {
         public TextView title;
         public TextView author;
         public TextView comment;
+        public View dongxi;
     }
 
     private static class ImageViewSize {

@@ -10,4 +10,12 @@
     <color name="dongxi_title_brown">#7f4b2f</color>
     <color name="dongxi_price_bg">#55cfcfcf</color>
     <color name="dongxi_red">#c4533a</color>
+    <color name="dongxi_gray">#999</color>
+    <color name="dongxi_bg">#E5EBE4</color>
+    <color name="gray_bg">#F5F5F5</color>
+
+    <color name="btn_green">#3fac00</color>
+
+    <color name="detail_bg">#99F5F5F5</color>
+
 </resources>

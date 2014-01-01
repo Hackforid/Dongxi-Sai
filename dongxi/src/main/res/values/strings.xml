@@ -21,6 +21,7 @@
         <item>真体验</item>
         <item>礼品盒</item>
     </string-array>
+
     <integer-array name="category_id_array">
         <item>0</item>
         <item>39</item>
@@ -40,12 +41,15 @@
 
     <string name="error_msg_load_fail">加载失败</string>
     <string name="loading_success">加载成功</string>
-
     <string name="refreshing">努力加载ing</string>
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="release_to_refresh">施法即可刷新</string>
-
     <string name="drawer_open">打开</string>
     <string name="drawer_close">关闭</string>
+    <string name="btn_buy">去购买</string>
+    <string name="title_activity_photo">多图杀猫</string>
+    <string name="title_activity_web_view">Detail</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_merchant">商家</string>
 
 </resources>
