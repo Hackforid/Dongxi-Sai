@@ -22,6 +22,7 @@
         />
 
     <com.smilehacker.dongxi.view.DetailScrollView
+        android:id="@+id/sv_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -34,6 +35,7 @@
             >
 
             <RelativeLayout
+                android:id="@+id/rl_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/detail_bg"
@@ -48,7 +50,6 @@
                     android:layout_marginRight="20dp"
                     android:textColor="@android:color/black"
                     android:textSize="15sp"
-                    android:text="sample"
                     />
 
                 <TextView
@@ -118,7 +119,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_below="@id/tv_dongxi_comment"
                     android:layout_marginTop="50dp"
-                    android:textSize="13dp"
+                    android:textSize="12sp"
                     android:textColor="@color/gray_font"
                     android:text="@string/user_created"
                     />
@@ -136,15 +137,15 @@
 
                 <com.smilehacker.dongxi.view.ScrollCompactGridView
                     android:id="@+id/gv_created"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/v_sep_user_created"
-                    android:layout_marginTop="40dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:layout_marginTop="40dp"
                     android:horizontalSpacing="15dp"
                     android:verticalSpacing="15dp"
-                    android:stretchMode="columnWidth"
                     android:numColumns="2"
                     android:scrollbars="none"
                     android:fadingEdgeLength="0dp"

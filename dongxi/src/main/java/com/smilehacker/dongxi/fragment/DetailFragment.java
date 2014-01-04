@@ -2,6 +2,7 @@ package com.smilehacker.dongxi.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.smilehacker.dongxi.R;
@@ -20,11 +23,13 @@ import com.smilehacker.dongxi.activity.HomeActivity;
 import com.smilehacker.dongxi.activity.MerchantActivity;
 import com.smilehacker.dongxi.activity.PhotoActivity;
 import com.smilehacker.dongxi.adapter.UserCreatedAdapter;
+import com.smilehacker.dongxi.app.App;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.model.Picture;
 import com.smilehacker.dongxi.network.SimpleVolleyTask;
 import com.smilehacker.dongxi.network.task.UserCreatedTask;
+import com.smilehacker.dongxi.view.DetailScrollView;
 import com.smilehacker.dongxi.view.ScrollCompactGridView;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -48,6 +53,9 @@ public class DetailFragment extends Fragment {
     private Button mBtnBuy;
     private ScrollCompactGridView mGvCreated;
     private CirclePageIndicator mImageIndicator;
+    private TextView mTvUserCreated;
+    private DetailScrollView mScrollView;
+    private RelativeLayout mRlContent;
 
     private Dongxi mDongxi;
     private ImagePagerAdapter mAdapter;
@@ -55,6 +63,7 @@ public class DetailFragment extends Fragment {
     private UserCreatedTask mUserCreatedTask;
 
     private CircleTransform mCircleTransform;
+    private App mApp;
 
 
     @Override
@@ -65,6 +74,8 @@ public class DetailFragment extends Fragment {
         mAdapter = new ImagePagerAdapter(mDongxi.pictures);
         mCreatedAdapter = new UserCreatedAdapter(getActivity(), new ArrayList<Dongxi>());
         mCircleTransform = new CircleTransform();
+
+        mApp = (App) getActivity().getApplication();
 
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         getActivity().getActionBar().setHomeButtonEnabled(true);
@@ -84,6 +95,9 @@ public class DetailFragment extends Fragment {
         mTvAuthor = (TextView) view.findViewById(R.id.tv_author_name);
         mTvComment = (TextView) view.findViewById(R.id.tv_dongxi_comment);
         mGvCreated = (ScrollCompactGridView) view.findViewById(R.id.gv_created);
+        mTvUserCreated = (TextView) view.findViewById(R.id.tv_user_created);
+        mScrollView = (DetailScrollView) view.findViewById(R.id.sv_detail);
+        mRlContent = (RelativeLayout) view.findViewById(R.id.rl_content);
 
         initView();
 
@@ -121,6 +135,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        resetUserCreatedPosition();
     }
 
     @Override
@@ -154,6 +169,31 @@ public class DetailFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void resetUserCreatedPosition() {
+        ViewTreeObserver vto = mTvUserCreated.getViewTreeObserver();
+        assert vto != null;
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= 16) {
+                    mTvUserCreated.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    mTvUserCreated.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+                int[] location = new int[2];
+                mTvUserCreated.getLocationInWindow(location);
+//
+                int screenHeight = mApp.deviceInfo.screenHeight;
+                if (screenHeight > location[1]) {
+                    mTvUserCreated.setPadding(mTvUserCreated.getPaddingLeft(), screenHeight - location[1] - mTvUserCreated.getHeight() - 20, mTvUserCreated.getPaddingRight(), mTvUserCreated.getPaddingBottom());
+                }
+
+            }
+        });
+
+
+    }
+
     private void load() {
         if (mUserCreatedTask != null) {
             mUserCreatedTask.cancel();
@@ -163,6 +203,7 @@ public class DetailFragment extends Fragment {
             public void onSuccess(List<Dongxi> result) {
                 filterList(result);
                 mCreatedAdapter.setDongxiList(result);
+                mGvCreated.setVisibility(View.VISIBLE);
             }
 
             private void filterList(List<Dongxi> list) {
@@ -183,7 +224,7 @@ public class DetailFragment extends Fragment {
 
             @Override
             public void onStart() {
-
+                mGvCreated.setVisibility(View.GONE);
             }
         });
 

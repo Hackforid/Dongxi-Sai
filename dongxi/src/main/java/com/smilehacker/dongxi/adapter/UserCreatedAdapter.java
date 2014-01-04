@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.activity.DetailActivity;
+import com.smilehacker.dongxi.app.App;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.view.DynamicHeightImageView;
@@ -27,11 +28,23 @@ public class UserCreatedAdapter extends BaseAdapter{
     private List<Dongxi> mDongxiList;
     private Context mContext;
     private LayoutInflater mInflater;
+    private int mPicHeight;
+    private int mPicWidth;
+
+    private double mRadio = 0.9;
 
     public UserCreatedAdapter(Context context, List<Dongxi> dongxiList) {
         mContext = context;
         mDongxiList = dongxiList;
         mInflater = LayoutInflater.from(context);
+
+        computerPictureSize();
+    }
+
+    private void computerPictureSize() {
+        App app = (App) mContext.getApplicationContext();
+        mPicWidth = app.deviceInfo.screenWidth / 2;
+        mPicHeight = (int) (mPicWidth * mRadio);
     }
 
     public void setDongxiList(List<Dongxi> list) {
@@ -63,7 +76,7 @@ public class UserCreatedAdapter extends BaseAdapter{
             view = mInflater.inflate(R.layout.item_created_grid, viewGroup, false);
             holder = new ViewHolder();
             holder.picture = (DynamicHeightImageView) view.findViewById(R.id.iv_dongxi);
-            holder.picture.setHeightRatio(0.9);
+            holder.picture.setHeightRatio(mRadio);
             holder.title = (TextView) view.findViewById(R.id.tv_dongxi_title);
             holder.card = view.findViewById(R.id.v_card);
             view.setTag(holder);
@@ -73,7 +86,7 @@ public class UserCreatedAdapter extends BaseAdapter{
 
         final Dongxi dongxi = mDongxiList.get(pos);
         holder.title.setText(dongxi.title);
-        Picasso.with(mContext).load(dongxi.pictures.get(0).src).into(holder.picture);
+        Picasso.with(mContext).load(dongxi.pictures.get(0).src).resize(mPicWidth, mPicHeight).centerCrop().into(holder.picture);
 
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override

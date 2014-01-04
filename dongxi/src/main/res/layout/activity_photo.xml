@@ -4,6 +4,5 @@
     android:id="@+id/viewpager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
     tools:context="com.smilehacker.dongxi.activity.PhotoActivity"
     />
