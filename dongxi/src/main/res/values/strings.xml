@@ -52,4 +52,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_merchant">商家</string>
 
+    <string name="user_created">TA发布的其他东西</string>
+
 </resources>

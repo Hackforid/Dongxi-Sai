@@ -1,10 +1,12 @@
 package com.smilehacker.dongxi.fragment;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 
 import com.devspark.appmsg.AppMsg;
 import com.smilehacker.dongxi.R;
+import com.smilehacker.dongxi.activity.HomeActivity;
 import com.smilehacker.dongxi.adapter.DongxiListAdapter;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
@@ -126,12 +129,16 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
         ActionBarPullToRefresh.from(getActivity())
                 .options(Options.create().scrollDistance(0.3f).build())
                 .allChildrenArePullable().listener(this).setup(mPtrLayout);
+        HomeActivity activity = (HomeActivity) getActivity();
+        if (!activity.mIsFragmentLoad) {
+            load(Constants.DONGXI_ALL, null, LoadingStatus.refresh);
+            activity.mIsFragmentLoad = true;
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        load(Constants.DONGXI_ALL, null, LoadingStatus.refresh);
     }
 
     public void onEvent(CategoryEvent event) {

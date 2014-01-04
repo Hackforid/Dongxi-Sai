@@ -16,14 +16,20 @@ import android.widget.TextView;
 
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.Utils.CircleTransform;
+import com.smilehacker.dongxi.activity.HomeActivity;
 import com.smilehacker.dongxi.activity.MerchantActivity;
 import com.smilehacker.dongxi.activity.PhotoActivity;
+import com.smilehacker.dongxi.adapter.UserCreatedAdapter;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.model.Picture;
+import com.smilehacker.dongxi.network.SimpleVolleyTask;
+import com.smilehacker.dongxi.network.task.UserCreatedTask;
+import com.smilehacker.dongxi.view.ScrollCompactGridView;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,10 +46,13 @@ public class DetailFragment extends Fragment {
     private TextView mTvAuthor;
     private TextView mTvComment;
     private Button mBtnBuy;
+    private ScrollCompactGridView mGvCreated;
     private CirclePageIndicator mImageIndicator;
 
     private Dongxi mDongxi;
     private ImagePagerAdapter mAdapter;
+    private UserCreatedAdapter mCreatedAdapter;
+    private UserCreatedTask mUserCreatedTask;
 
     private CircleTransform mCircleTransform;
 
@@ -54,6 +63,7 @@ public class DetailFragment extends Fragment {
         Bundle args = getArguments();
         mDongxi = args.getParcelable(Constants.KEY_DONGXI);
         mAdapter = new ImagePagerAdapter(mDongxi.pictures);
+        mCreatedAdapter = new UserCreatedAdapter(getActivity(), new ArrayList<Dongxi>());
         mCircleTransform = new CircleTransform();
 
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -73,6 +83,7 @@ public class DetailFragment extends Fragment {
         mIvAvatar = (ImageView) view.findViewById(R.id.iv_author_avatar);
         mTvAuthor = (TextView) view.findViewById(R.id.tv_author_name);
         mTvComment = (TextView) view.findViewById(R.id.tv_dongxi_comment);
+        mGvCreated = (ScrollCompactGridView) view.findViewById(R.id.gv_created);
 
         initView();
 
@@ -87,6 +98,7 @@ public class DetailFragment extends Fragment {
 
         mImagePager.setAdapter(mAdapter);
         mImageIndicator.setViewPager(mImagePager);
+        mGvCreated.setAdapter(mCreatedAdapter);
 
         Picasso.with(getActivity()).load(mDongxi.author.largeAvatar).transform(mCircleTransform).into(mIvAvatar);
 
@@ -114,6 +126,15 @@ public class DetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        load();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mUserCreatedTask != null) {
+            mUserCreatedTask.cancel();
+        }
     }
 
     @Override
@@ -121,7 +142,10 @@ public class DetailFragment extends Fragment {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                getActivity().finish();
+                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 return true;
             default:
                 break;
@@ -129,6 +153,43 @@ public class DetailFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void load() {
+        if (mUserCreatedTask != null) {
+            mUserCreatedTask.cancel();
+        }
+        mUserCreatedTask = new UserCreatedTask(getActivity(), mDongxi.author.id, new SimpleVolleyTask.VolleyTaskCallBack<List<Dongxi>>() {
+            @Override
+            public void onSuccess(List<Dongxi> result) {
+                filterList(result);
+                mCreatedAdapter.setDongxiList(result);
+            }
+
+            private void filterList(List<Dongxi> list) {
+                for (Dongxi dongxi: list) {
+                    if (mDongxi.id.equals(dongxi.id)) {
+                        list.remove(dongxi);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(Throwable e) {
+                if (e != null) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onStart() {
+
+            }
+        });
+
+        mUserCreatedTask.execute();
+    }
+
 
     private class ImagePagerAdapter extends PagerAdapter {
         private List<Picture> pictures;

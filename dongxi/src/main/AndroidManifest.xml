@@ -18,7 +18,8 @@
             android:name="com.smilehacker.dongxi.activity.HomeActivity"
             android:hardwareAccelerated="true"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.Overlay" >
+            android:theme="@style/AppTheme.Overlay"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
