@@ -31,11 +31,7 @@ public class DongxiTask extends SimpleVolleyTask<List<Dongxi>>{
 
 
     public DongxiTask(Context context, VolleyTaskCallBack<List<Dongxi>> callBack) {
-        this(context, null, null, null, callBack);
-    }
-
-    public DongxiTask(Context context, String url, JSONObject json, RequestMethod method, VolleyTaskCallBack<List<Dongxi>> callback) {
-        super(context, url, json, method, callback);
+        super(context, null, null, null, callBack);
     }
 
     public void setParams(int tag, String untilId) {
