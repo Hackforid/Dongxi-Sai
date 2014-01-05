@@ -21,9 +21,9 @@ import java.util.List;
 /**
  * Created by kleist on 14-1-4.
  */
-public class UserCreatedAdapter extends BaseAdapter{
+public class DongxiGridAdapter extends BaseAdapter{
 
-    private final static String TAG = UserCreatedAdapter.class.getName();
+    private final static String TAG = DongxiGridAdapter.class.getName();
 
     private List<Dongxi> mDongxiList;
     private Context mContext;
@@ -33,7 +33,7 @@ public class UserCreatedAdapter extends BaseAdapter{
 
     private double mRadio = 0.9;
 
-    public UserCreatedAdapter(Context context, List<Dongxi> dongxiList) {
+    public DongxiGridAdapter(Context context, List<Dongxi> dongxiList) {
         mContext = context;
         mDongxiList = dongxiList;
         mInflater = LayoutInflater.from(context);

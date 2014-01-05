@@ -23,13 +23,13 @@ import com.smilehacker.dongxi.Utils.CircleTransform;
 import com.smilehacker.dongxi.activity.HomeActivity;
 import com.smilehacker.dongxi.activity.MerchantActivity;
 import com.smilehacker.dongxi.activity.PhotoActivity;
-import com.smilehacker.dongxi.adapter.UserCreatedAdapter;
+import com.smilehacker.dongxi.adapter.DongxiGridAdapter;
 import com.smilehacker.dongxi.app.App;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.model.Picture;
 import com.smilehacker.dongxi.network.SimpleVolleyTask;
-import com.smilehacker.dongxi.network.task.UserCreatedTask;
+import com.smilehacker.dongxi.network.task.DongxiSimilarsTask;
 import com.smilehacker.dongxi.view.DetailScrollView;
 import com.smilehacker.dongxi.view.ScrollCompactGridView;
 import com.squareup.picasso.Picasso;
@@ -52,17 +52,17 @@ public class DetailFragment extends Fragment {
     private TextView mTvAuthor;
     private TextView mTvComment;
     private Button mBtnBuy;
-    private ScrollCompactGridView mGvCreated;
+    private ScrollCompactGridView mGvSimilars;
     private CirclePageIndicator mImageIndicator;
     private DetailScrollView mScrollView;
     private RelativeLayout mRlContent;
-    private LinearLayout mLlUserCreated;
+    private LinearLayout mLlSimilars;
 
 
     private Dongxi mDongxi;
     private ImagePagerAdapter mAdapter;
-    private UserCreatedAdapter mCreatedAdapter;
-    private UserCreatedTask mUserCreatedTask;
+    private DongxiGridAdapter mSimilarsAdapter;
+    private DongxiSimilarsTask mSimilarsTask;
 
     private CircleTransform mCircleTransform;
     private App mApp;
@@ -74,7 +74,7 @@ public class DetailFragment extends Fragment {
         Bundle args = getArguments();
         mDongxi = args.getParcelable(Constants.KEY_DONGXI);
         mAdapter = new ImagePagerAdapter(mDongxi.pictures);
-        mCreatedAdapter = new UserCreatedAdapter(getActivity(), new ArrayList<Dongxi>());
+        mSimilarsAdapter = new DongxiGridAdapter(getActivity(), new ArrayList<Dongxi>());
         mCircleTransform = new CircleTransform();
 
         mApp = (App) getActivity().getApplication();
@@ -96,10 +96,10 @@ public class DetailFragment extends Fragment {
         mIvAvatar = (ImageView) view.findViewById(R.id.iv_author_avatar);
         mTvAuthor = (TextView) view.findViewById(R.id.tv_author_name);
         mTvComment = (TextView) view.findViewById(R.id.tv_dongxi_comment);
-        mGvCreated = (ScrollCompactGridView) view.findViewById(R.id.gv_created);
+        mGvSimilars = (ScrollCompactGridView) view.findViewById(R.id.gv_similars);
         mScrollView = (DetailScrollView) view.findViewById(R.id.sv_detail);
         mRlContent = (RelativeLayout) view.findViewById(R.id.rl_content);
-        mLlUserCreated = (LinearLayout) view.findViewById(R.id.ll_user_created);
+        mLlSimilars = (LinearLayout) view.findViewById(R.id.ll_user_similars);
 
         initView();
 
@@ -114,7 +114,7 @@ public class DetailFragment extends Fragment {
 
         mImagePager.setAdapter(mAdapter);
         mImageIndicator.setViewPager(mImagePager);
-        mGvCreated.setAdapter(mCreatedAdapter);
+        mGvSimilars.setAdapter(mSimilarsAdapter);
 
         Picasso.with(getActivity()).load(mDongxi.author.largeAvatar).transform(mCircleTransform).fit().into(mIvAvatar);
 
@@ -149,8 +149,8 @@ public class DetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mUserCreatedTask != null) {
-            mUserCreatedTask.cancel();
+        if (mSimilarsTask != null) {
+            mSimilarsTask.cancel();
         }
     }
 
@@ -172,24 +172,24 @@ public class DetailFragment extends Fragment {
     }
 
     private void resetUserCreatedPosition() {
-        ViewTreeObserver vto = mLlUserCreated.getViewTreeObserver();
+        ViewTreeObserver vto = mLlSimilars.getViewTreeObserver();
         assert vto != null;
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= 16) {
-                    mLlUserCreated.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    mLlSimilars.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    mLlUserCreated.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    mLlSimilars.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
                 int[] location = new int[2];
-                mLlUserCreated.getLocationInWindow(location);
+                mLlSimilars.getLocationInWindow(location);
 //
                 int screenHeight = mApp.deviceInfo.screenHeight;
-                int paddingTop = screenHeight - location[1] - mLlUserCreated.getHeight();
+                int paddingTop = screenHeight - location[1] - mLlSimilars.getHeight();
 
                 if (screenHeight > location[1] && paddingTop > 0) {
-                    mLlUserCreated.setPadding(mLlUserCreated.getPaddingLeft(), paddingTop, mLlUserCreated.getPaddingRight(), mLlUserCreated.getPaddingBottom());
+                    mLlSimilars.setPadding(mLlSimilars.getPaddingLeft(), paddingTop, mLlSimilars.getPaddingRight(), mLlSimilars.getPaddingBottom());
                 }
 
             }
@@ -199,19 +199,19 @@ public class DetailFragment extends Fragment {
     }
 
     private void load() {
-        if (mUserCreatedTask != null) {
-            mUserCreatedTask.cancel();
+        if (mSimilarsTask != null) {
+            mSimilarsTask.cancel();
         }
-        mUserCreatedTask = new UserCreatedTask(getActivity(), mDongxi.author.id, new SimpleVolleyTask.VolleyTaskCallBack<List<Dongxi>>() {
+        mSimilarsTask = new DongxiSimilarsTask(getActivity(), mDongxi.id, new SimpleVolleyTask.VolleyTaskCallBack<List<Dongxi>>() {
             @Override
             public void onSuccess(List<Dongxi> result) {
                 filterList(result);
                 if (result.size() > 0) {
-                    mLlUserCreated.setVisibility(View.VISIBLE);
-                    mCreatedAdapter.setDongxiList(result);
-                    mGvCreated.setVisibility(View.VISIBLE);
+                    mLlSimilars.setVisibility(View.VISIBLE);
+                    mSimilarsAdapter.setDongxiList(result);
+                    mGvSimilars.setVisibility(View.VISIBLE);
                 } else {
-                    mLlUserCreated.setVisibility(View.GONE);
+                    mLlSimilars.setVisibility(View.GONE);
                 }
             }
 
@@ -233,11 +233,11 @@ public class DetailFragment extends Fragment {
 
             @Override
             public void onStart() {
-                mGvCreated.setVisibility(View.GONE);
+                mGvSimilars.setVisibility(View.GONE);
             }
         });
 
-        mUserCreatedTask.execute();
+        mSimilarsTask.execute();
     }
 
 

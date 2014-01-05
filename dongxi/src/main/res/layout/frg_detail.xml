@@ -113,7 +113,7 @@
                     />
 
                 <LinearLayout
-                    android:id="@+id/ll_user_created"
+                    android:id="@+id/ll_user_similars"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_dongxi_comment"
@@ -122,17 +122,17 @@
                     >
 
                     <TextView
-                        android:id="@+id/tv_user_created"
+                        android:id="@+id/tv_user_similars"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:textSize="12sp"
                         android:textColor="@color/gray_font"
-                        android:text="@string/user_created"
+                        android:text="@string/similars_dongxi"
                         />
 
                     <View
-                        android:id="@+id/v_sep_user_created"
+                        android:id="@+id/v_sep_user_similars"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
@@ -145,7 +145,7 @@
 
             </RelativeLayout>
             <com.smilehacker.dongxi.view.ScrollCompactGridView
-                android:id="@+id/gv_created"
+                android:id="@+id/gv_similars"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

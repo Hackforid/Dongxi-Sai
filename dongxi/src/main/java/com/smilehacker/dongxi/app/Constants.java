@@ -7,6 +7,7 @@ public class Constants {
 
     public final static String DONGXI_API = "https://api.douban.com/v2/commodity/";
     public final static String DONGXI_SHOWS = "shows";
+    public final static String DONGXI_SHOW = "show/";
     public final static String DONGXI_USER = "user/";
 
     public final static int DONGXI_ALL = 0;

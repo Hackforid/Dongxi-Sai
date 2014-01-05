@@ -53,5 +53,6 @@
     <string name="title_activity_merchant">商家</string>
 
     <string name="user_created">TA发布的其他东西</string>
+    <string name="similars_dongxi">相似的东西</string>
 
 </resources>
