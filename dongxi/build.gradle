@@ -23,13 +23,26 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../july.keystore")
+            storePassword "saisecret"
+            keyAlias "default"
+            keyPassword "julyfordongxi777"
+        }
+    }
+
     buildTypes {
         release {
-            runProguard false
+            signingConfig signingConfigs.release
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
 }
+
 
 dependencies {
     compile 'com.android.support:support-v13:+'
