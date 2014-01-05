@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -53,9 +54,10 @@ public class DetailFragment extends Fragment {
     private Button mBtnBuy;
     private ScrollCompactGridView mGvCreated;
     private CirclePageIndicator mImageIndicator;
-    private TextView mTvUserCreated;
     private DetailScrollView mScrollView;
     private RelativeLayout mRlContent;
+    private LinearLayout mLlUserCreated;
+
 
     private Dongxi mDongxi;
     private ImagePagerAdapter mAdapter;
@@ -95,9 +97,9 @@ public class DetailFragment extends Fragment {
         mTvAuthor = (TextView) view.findViewById(R.id.tv_author_name);
         mTvComment = (TextView) view.findViewById(R.id.tv_dongxi_comment);
         mGvCreated = (ScrollCompactGridView) view.findViewById(R.id.gv_created);
-        mTvUserCreated = (TextView) view.findViewById(R.id.tv_user_created);
         mScrollView = (DetailScrollView) view.findViewById(R.id.sv_detail);
         mRlContent = (RelativeLayout) view.findViewById(R.id.rl_content);
+        mLlUserCreated = (LinearLayout) view.findViewById(R.id.ll_user_created);
 
         initView();
 
@@ -114,7 +116,7 @@ public class DetailFragment extends Fragment {
         mImageIndicator.setViewPager(mImagePager);
         mGvCreated.setAdapter(mCreatedAdapter);
 
-        Picasso.with(getActivity()).load(mDongxi.author.largeAvatar).transform(mCircleTransform).into(mIvAvatar);
+        Picasso.with(getActivity()).load(mDongxi.author.largeAvatar).transform(mCircleTransform).fit().into(mIvAvatar);
 
         if (mDongxi.pictures.size() <= 1) {
             mImageIndicator.setVisibility(View.GONE);
@@ -170,22 +172,24 @@ public class DetailFragment extends Fragment {
     }
 
     private void resetUserCreatedPosition() {
-        ViewTreeObserver vto = mTvUserCreated.getViewTreeObserver();
+        ViewTreeObserver vto = mLlUserCreated.getViewTreeObserver();
         assert vto != null;
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= 16) {
-                    mTvUserCreated.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    mLlUserCreated.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    mTvUserCreated.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    mLlUserCreated.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
                 int[] location = new int[2];
-                mTvUserCreated.getLocationInWindow(location);
+                mLlUserCreated.getLocationInWindow(location);
 //
                 int screenHeight = mApp.deviceInfo.screenHeight;
-                if (screenHeight > location[1]) {
-                    mTvUserCreated.setPadding(mTvUserCreated.getPaddingLeft(), screenHeight - location[1] - mTvUserCreated.getHeight() - 20, mTvUserCreated.getPaddingRight(), mTvUserCreated.getPaddingBottom());
+                int paddingTop = screenHeight - location[1] - mLlUserCreated.getHeight();
+
+                if (screenHeight > location[1] && paddingTop > 0) {
+                    mLlUserCreated.setPadding(mLlUserCreated.getPaddingLeft(), paddingTop, mLlUserCreated.getPaddingRight(), mLlUserCreated.getPaddingBottom());
                 }
 
             }
@@ -202,8 +206,13 @@ public class DetailFragment extends Fragment {
             @Override
             public void onSuccess(List<Dongxi> result) {
                 filterList(result);
-                mCreatedAdapter.setDongxiList(result);
-                mGvCreated.setVisibility(View.VISIBLE);
+                if (result.size() > 0) {
+                    mLlUserCreated.setVisibility(View.VISIBLE);
+                    mCreatedAdapter.setDongxiList(result);
+                    mGvCreated.setVisibility(View.VISIBLE);
+                } else {
+                    mLlUserCreated.setVisibility(View.GONE);
+                }
             }
 
             private void filterList(List<Dongxi> list) {
@@ -246,7 +255,7 @@ public class DetailFragment extends Fragment {
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             imageView.setLayoutParams(lp);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Picasso.with(getActivity()).load(src).into(imageView);
+            Picasso.with(getActivity()).load(src).fit().centerCrop().into(imageView);
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

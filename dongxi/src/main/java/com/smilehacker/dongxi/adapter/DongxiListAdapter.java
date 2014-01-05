@@ -20,6 +20,7 @@ import com.smilehacker.dongxi.app.App;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.network.image.ImageCacheManager;
+import com.smilehacker.dongxi.view.DynamicHeightImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -89,14 +90,15 @@ public class DongxiListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_dongxi_list, parent, false);
             holder = new ViewHolder();
-            holder.image = (ImageView) convertView.findViewById(R.id.iv_dongxi);
+            holder.image = (DynamicHeightImageView) convertView.findViewById(R.id.iv_dongxi);
             holder.price = (TextView) convertView.findViewById(R.id.tv_dongxi_price);
             holder.title = (TextView) convertView.findViewById(R.id.tv_dongxi_title);
             holder.avatar = (ImageView) convertView.findViewById(R.id.iv_author_avatar);
             holder.author = (TextView) convertView.findViewById(R.id.tv_author_name);
             holder.comment = (TextView) convertView.findViewById(R.id.tv_dongxi_comment);
             holder.dongxi = convertView.findViewById(R.id.v_dongxi);
-            holder.image.setLayoutParams(mImageLayoutParams);
+//            holder.image.setLayoutParams(mImageLayoutParams);
+            holder.image.setHeightRatio(0.66);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -114,9 +116,10 @@ public class DongxiListAdapter extends BaseAdapter {
             holder.comment.setText(dongxi.text);
         }
 
-        Picasso.with(mContext).load(dongxi.pictures.get(0).src).resize(mDongxiImageWidth, mDongxiImageHeight).centerCrop().into(holder.image);
+        Picasso.with(mContext).load(dongxi.pictures.get(0).src).fit().centerCrop()
+                .error(R.drawable.img_default).into(holder.image);
 
-        Picasso.with(mContext).load(dongxi.author.largeAvatar).transform(mCircleTransform).into(holder.avatar);
+        Picasso.with(mContext).load(dongxi.author.largeAvatar).transform(mCircleTransform).fit().centerCrop().into(holder.avatar);
 
         holder.dongxi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +135,7 @@ public class DongxiListAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        public ImageView image;
+        public DynamicHeightImageView image;
         public ImageView avatar;
         public TextView price;
         public TextView title;

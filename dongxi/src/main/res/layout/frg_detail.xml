@@ -38,7 +38,7 @@
                 android:id="@+id/rl_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/detail_bg"
+                android:background="@drawable/bg_detail_header"
                 >
 
                 <TextView
@@ -112,46 +112,53 @@
                     android:textSize="14sp"
                     />
 
-                <TextView
-                    android:id="@+id/tv_user_created"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/ll_user_created"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:layout_below="@id/tv_dongxi_comment"
                     android:layout_marginTop="50dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/gray_font"
-                    android:text="@string/user_created"
-                    />
+                    android:orientation="vertical"
+                    >
 
-                <View
-                    android:id="@+id/v_sep_user_created"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    android:layout_below="@id/tv_user_created"
-                    android:background="@color/gray_font"
-                    />
+                    <TextView
+                        android:id="@+id/tv_user_created"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray_font"
+                        android:text="@string/user_created"
+                        />
 
-                <com.smilehacker.dongxi.view.ScrollCompactGridView
-                    android:id="@+id/gv_created"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/v_sep_user_created"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="40dp"
-                    android:horizontalSpacing="15dp"
-                    android:verticalSpacing="15dp"
-                    android:numColumns="2"
-                    android:scrollbars="none"
-                    android:fadingEdgeLength="0dp"
-                    />
+                    <View
+                        android:id="@+id/v_sep_user_created"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:background="@color/holo_light_gray"
+                        />
+                </LinearLayout>
+
 
             </RelativeLayout>
+            <com.smilehacker.dongxi.view.ScrollCompactGridView
+                android:id="@+id/gv_created"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="40dp"
+                android:horizontalSpacing="15dp"
+                android:verticalSpacing="15dp"
+                android:numColumns="2"
+                android:scrollbars="none"
+                android:fadingEdgeLength="0dp"
+                android:background="@color/gray_bg"
+                />
 
         </LinearLayout>
     </com.smilehacker.dongxi.view.DetailScrollView>

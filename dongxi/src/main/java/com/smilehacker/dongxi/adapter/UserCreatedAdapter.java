@@ -86,7 +86,7 @@ public class UserCreatedAdapter extends BaseAdapter{
 
         final Dongxi dongxi = mDongxiList.get(pos);
         holder.title.setText(dongxi.title);
-        Picasso.with(mContext).load(dongxi.pictures.get(0).src).resize(mPicWidth, mPicHeight).centerCrop().into(holder.picture);
+        Picasso.with(mContext).load(dongxi.pictures.get(0).src).fit().centerCrop().into(holder.picture);
 
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override

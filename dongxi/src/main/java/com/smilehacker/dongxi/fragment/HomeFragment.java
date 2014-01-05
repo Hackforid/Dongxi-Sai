@@ -1,12 +1,10 @@
 package com.smilehacker.dongxi.fragment;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -130,10 +128,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
                 .options(Options.create().scrollDistance(0.3f).build())
                 .allChildrenArePullable().listener(this).setup(mPtrLayout);
         HomeActivity activity = (HomeActivity) getActivity();
-        if (!activity.mIsFragmentLoad) {
-            load(Constants.DONGXI_ALL, null, LoadingStatus.refresh);
-            activity.mIsFragmentLoad = true;
-        }
+        load(Constants.DONGXI_ALL, null, LoadingStatus.refresh);
     }
 
     @Override
@@ -311,7 +306,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
                 View firstView = absListView.getChildAt(0);
                 if (firstView != null) {
                     double ratio =  firstView.getY() / mActionBarHeight + 1;
-                    ratio = ratio < 0.2 ? 0.2 : ratio;
+                    ratio = ratio < 0.5 ? 0.5 : ratio;
                     int alpha = (int) (ratio * 255);
                     mActionBarBackgroundDrawble.setAlpha(alpha);
                 }
