@@ -23,8 +23,8 @@ import com.smilehacker.dongxi.adapter.DongxiListAdapter;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.model.event.CategoryEvent;
-import com.smilehacker.dongxi.network.SimpleVolleyTask;
-import com.smilehacker.dongxi.network.task.DongxiTask;
+import com.smilehacker.dongxi.network.task.ExDongxiTask;
+import com.smilehacker.exvolley.ex.ExVolleyTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
     private Drawable mActionBarBackgroundDrawble;
     private AppMsg.Style mAppMsgStyle;
 
-    private DongxiTask mDongxiTask;
+    private ExDongxiTask mExDongxiTask;
     private DongxiListAdapter mAdapter;
     private List<Dongxi> mDongxiList;
 
@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
     }
     private LoadingStatus mLoadingStatus = LoadingStatus.stop;
     private int mActionBarHeight;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,9 +83,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mDongxiTask != null) {
-            mDongxiTask.cancel();
-        }
+        cancelDongxiTask();
         mEventBus.unregister(this);
     }
 
@@ -208,55 +207,70 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 
     private void load(int tag, String untilId, LoadingStatus status) {
         mLoadingStatus = status;
-        if (mDongxiTask == null) {
-            mDongxiTask = new DongxiTask(getActivity(), new SimpleVolleyTask.VolleyTaskCallBack<List<Dongxi>>() {
-                @Override
-                public void onStart() {
-                    if (mLoadingStatus == LoadingStatus.refresh) {
-                        startRefresh();
-                        mLvDongxi.smoothScrollToPosition(0);
-                        mPbLoading.setVisibility(View.GONE);
-                    } else if (mLoadingStatus == LoadingStatus.loadingMore) {
-                        stopRefresh();
-                        mPbLoading.setVisibility(View.VISIBLE);
-                    }
-                }
 
-                @Override
-                public void onSuccess(List<Dongxi> result) {
-                    stopRefresh();
-                    mPbLoading.setVisibility(View.GONE);
-
-                    if (mLoadingStatus == LoadingStatus.loadingMore) {
-                        mDongxiList.addAll(result);
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mDongxiList.clear();
-                        mDongxiList.addAll(result);
-                        mAdapter.notifyDataSetChanged();
-                    }
-
-                    mLoadingStatus = LoadingStatus.stop;
-                }
-
-                @Override
-                public void onFail(Throwable e) {
-                    mLoadingStatus = LoadingStatus.stop;
-                    mPbLoading.setVisibility(View.GONE);
-                    stopRefresh();
-                    if (e != null) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(getActivity(), R.string.error_msg_load_fail, Toast.LENGTH_SHORT).show();
-                }
-
-            });
-        } else {
-            mDongxiTask.cancel();
+        if (mExDongxiTask == null) {
+            cancelDongxiTask();
         }
-        mDongxiTask.setParams(tag, untilId);
-        mDongxiTask.execute();
+
+        mExDongxiTask = new ExDongxiTask(getActivity(), String.valueOf(tag), untilId,
+                new ExVolleyTask.ExVolleyTaskCallBack<List<Dongxi>>() {
+
+                    @Override
+                    public void onStart() {
+                        if (mLoadingStatus == LoadingStatus.refresh) {
+                            startRefresh();
+                            mLvDongxi.smoothScrollToPosition(0);
+                            mPbLoading.setVisibility(View.GONE);
+                        } else if (mLoadingStatus == LoadingStatus.loadingMore) {
+                            stopRefresh();
+                            mPbLoading.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(List<Dongxi> result) {
+                        stopRefresh();
+                        mPbLoading.setVisibility(View.GONE);
+
+                        if (mLoadingStatus == LoadingStatus.loadingMore) {
+                            mDongxiList.addAll(result);
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            mDongxiList.clear();
+                            mDongxiList.addAll(result);
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+                        mLoadingStatus = LoadingStatus.stop;
+                    }
+
+                    @Override
+                    public void onFail(Throwable e) {
+                        mLoadingStatus = LoadingStatus.stop;
+                        mPbLoading.setVisibility(View.GONE);
+                        stopRefresh();
+                        if (e != null) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getActivity(), R.string.error_msg_load_fail, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                });
+
+        mExDongxiTask.execute();
     }
+
+    private void cancelDongxiTask() {
+        if (mExDongxiTask != null) {
+            mExDongxiTask.cancel();
+            mExDongxiTask = null;
+        }
+    }
+
 
     @Override
     public void onRefreshStarted(View view) {
