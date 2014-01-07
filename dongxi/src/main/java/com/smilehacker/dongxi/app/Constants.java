@@ -5,7 +5,10 @@ package com.smilehacker.dongxi.app;
  */
 public class Constants {
 
-
+    public final static String DONGXI_API = "";
+    public final static String DONGXI_SHOWS = "";
+    public final static String DONGXI_SHOW = "";
+    public final static String DONGXI_USER = "";
 
     public final static int DONGXI_ALL = 0;
     public final static int DONGXI_HE = 39;
