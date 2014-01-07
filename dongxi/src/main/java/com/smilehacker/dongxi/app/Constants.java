@@ -6,6 +6,7 @@ package com.smilehacker.dongxi.app;
 public class Constants {
 
 
+
     public final static int DONGXI_ALL = 0;
     public final static int DONGXI_HE = 39;
     public final static int DONGXI_SHE = 31;
