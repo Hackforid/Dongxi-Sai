@@ -131,7 +131,7 @@ public class ExRequestBuilder {
 
     public ExRequest excute() {
 
-        if (mMethod == Request.Method.GET) {
+        if (mMethod == Request.Method.GET && mRequestParams != null && mRequestParams.size() > 0) {
             mUrl = UrlUtils.UrlBuilder(mUrl, mRequestParams);
         }
 

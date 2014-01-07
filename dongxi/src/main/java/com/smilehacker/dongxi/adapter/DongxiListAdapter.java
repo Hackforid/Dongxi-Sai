@@ -12,14 +12,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.Utils.CircleTransform;
 import com.smilehacker.dongxi.activity.DetailActivity;
 import com.smilehacker.dongxi.app.App;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
-import com.smilehacker.dongxi.network.image.ImageCacheManager;
 import com.smilehacker.dongxi.view.DynamicHeightImageView;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +33,6 @@ public class DongxiListAdapter extends BaseAdapter {
     private Context mContext;
     private List<Dongxi> mDongxiList;
     private LayoutInflater mInflater;
-    private ImageLoader mImageLoader;
 
     private CircleTransform mCircleTransform;
     private ImageViewSize mImageSize;
@@ -49,7 +46,6 @@ public class DongxiListAdapter extends BaseAdapter {
         mContext = context;
         mDongxiList = dongxiList;
         mInflater = LayoutInflater.from(context);
-        mImageLoader = ImageCacheManager.getInstance().getImageLoader();
         mCircleTransform = new CircleTransform();
         mImageSize = new ImageViewSize();
         mAvatarSize = new ImageViewSize();

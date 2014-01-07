@@ -56,5 +56,4 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:1.2.1'
     compile 'com.github.johnkil.android-appmsg:appmsg:1.1.1'
     compile project (':Libs:exvolley')
-    compile files('../Libs/volley.jar')
 }

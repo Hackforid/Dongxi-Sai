@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.smilehacker.dongxi.R;
 import com.smilehacker.dongxi.Utils.CircleTransform;
 import com.smilehacker.dongxi.activity.HomeActivity;
@@ -28,10 +30,13 @@ import com.smilehacker.dongxi.app.App;
 import com.smilehacker.dongxi.app.Constants;
 import com.smilehacker.dongxi.model.Dongxi;
 import com.smilehacker.dongxi.model.Picture;
-import com.smilehacker.dongxi.network.SimpleVolleyTask;
-import com.smilehacker.dongxi.network.task.DongxiSimilarsTask;
+import com.smilehacker.dongxi.model.Similars;
 import com.smilehacker.dongxi.view.DetailScrollView;
 import com.smilehacker.dongxi.view.ScrollCompactGridView;
+import com.smilehacker.exvolley.Request;
+import com.smilehacker.exvolley.Response;
+import com.smilehacker.exvolley.VolleyError;
+import com.smilehacker.exvolley.ex.ExVolley;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -62,7 +67,8 @@ public class DetailFragment extends Fragment {
     private Dongxi mDongxi;
     private ImagePagerAdapter mAdapter;
     private DongxiGridAdapter mSimilarsAdapter;
-    private DongxiSimilarsTask mSimilarsTask;
+
+    private Gson mGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     private CircleTransform mCircleTransform;
     private App mApp;
@@ -149,9 +155,7 @@ public class DetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSimilarsTask != null) {
-            mSimilarsTask.cancel();
-        }
+        ExVolley.with(getActivity()).cancel(TAG);
     }
 
     @Override
@@ -194,51 +198,56 @@ public class DetailFragment extends Fragment {
 
             }
         });
+    }
 
-
+    private void filterList(List<Dongxi> list) {
+        for (Dongxi dongxi: list) {
+            if (mDongxi.id.equals(dongxi.id)) {
+                list.remove(dongxi);
+                break;
+            }
+        }
     }
 
     private void load() {
-        if (mSimilarsTask != null) {
-            mSimilarsTask.cancel();
-        }
-        mSimilarsTask = new DongxiSimilarsTask(getActivity(), mDongxi.id, new SimpleVolleyTask.VolleyTaskCallBack<List<Dongxi>>() {
-            @Override
-            public void onSuccess(List<Dongxi> result) {
-                filterList(result);
-                if (result.size() > 0) {
-                    mLlSimilars.setVisibility(View.VISIBLE);
-                    mSimilarsAdapter.setDongxiList(result);
-                    mGvSimilars.setVisibility(View.VISIBLE);
-                } else {
-                    mLlSimilars.setVisibility(View.GONE);
-                }
-            }
+        ExVolley.with(getActivity()).cancel(TAG);
+        mGvSimilars.setVisibility(View.GONE);
 
-            private void filterList(List<Dongxi> list) {
-                for (Dongxi dongxi: list) {
-                    if (mDongxi.id.equals(dongxi.id)) {
-                        list.remove(dongxi);
-                        break;
+        String url = new StringBuilder()
+            .append(Constants.DONGXI_API)
+            .append(Constants.DONGXI_SHOW)
+            .append(mDongxi.id)
+            .append("/similars")
+            .toString();
+
+        ExVolley
+            .with(getActivity())
+            .load(url)
+            .method(Request.Method.GET)
+            .setResponseListener(new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    List<Dongxi> result = mGson.fromJson(response, Similars.class).similars;
+                    filterList(result);
+                    if (result.size() > 0) {
+                        mLlSimilars.setVisibility(View.VISIBLE);
+                        mSimilarsAdapter.setDongxiList(result);
+                        mGvSimilars.setVisibility(View.VISIBLE);
+                    } else {
+                        mLlSimilars.setVisibility(View.GONE);
                     }
                 }
-            }
+            }, String.class)
+            .setErrorListener(new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-            @Override
-            public void onFail(Throwable e) {
-                if (e != null) {
-                    e.printStackTrace();
                 }
-            }
+            })
+            .excute();
 
-            @Override
-            public void onStart() {
-                mGvSimilars.setVisibility(View.GONE);
-            }
-        });
-
-        mSimilarsTask.execute();
     }
+
 
 
     private class ImagePagerAdapter extends PagerAdapter {

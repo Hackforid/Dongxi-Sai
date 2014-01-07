@@ -212,6 +212,11 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
             cancelDongxiTask();
         }
 
+        /**
+         * 将网络事务的处理单独封装 view层只负责处理结果和响应error
+         * 看起来还是很复杂
+         * 不过也没法精简了吧
+         */
         mExDongxiTask = new ExDongxiTask(getActivity(), String.valueOf(tag), untilId,
                 new ExVolleyTask.ExVolleyTaskCallBack<List<Dongxi>>() {
 

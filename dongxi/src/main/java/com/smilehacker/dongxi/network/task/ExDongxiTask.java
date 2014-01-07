@@ -21,6 +21,9 @@ import java.util.List;
 
 /**
  * Created by kleist on 14-1-7.
+ * 封装网络请求
+ * 需要多三步处理
+ * 不知道是否划得来
  */
 public class ExDongxiTask extends ExVolleyTask<List<Dongxi>> {
 
